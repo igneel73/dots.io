@@ -3,13 +3,21 @@
  * Description: Initializes the express server
  */
 
-const app = require('express')();
-const http = require('http').createServer(app);
+// imports
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+
+const index = require('./routes/index');
 const config = require('./config/config');
-const io = require('socket.io')(http);
 
 // Route Definitions
-app.get('/', (req, res) => res.sendFile(__dirname + '/static/html/index.html'));
+const app = express();
+app.use(index);
+
+// Server initialisation
+const server = http.createServer(app);
+const io = socketIo(server);
 
 // Socket Definitions
 io.on('connection', (socket) => {
@@ -20,6 +28,6 @@ io.on('connection', (socket) => {
 });
 
 // Run server
-http.listen(config.PORT, () =>
+server.listen(config.PORT, () =>
   console.log(`Example app listening at http://localhost:${config.PORT}`)
 );

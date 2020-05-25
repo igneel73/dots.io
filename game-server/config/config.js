@@ -1,4 +1,4 @@
 module.exports = config = {
-  PORT: 3000,
+  PORT: process.env.PORT || 5000,
   HOST: 'localhost',
 };
